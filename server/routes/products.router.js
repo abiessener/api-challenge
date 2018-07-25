@@ -14,7 +14,8 @@ const pricingService = new PricingService();
 /**
  * returns a JSON response with product information
  */
-router.get('/:productId', function(req, res) {
+router.get('/:productId', (req, res) => {
+  // todo: make product class definition
   let product = {
     title: '',
     current_price: {},
@@ -22,7 +23,7 @@ router.get('/:productId', function(req, res) {
   };
 
   // call api service to look up product name (which will eventually check cache)
-  apiService.getProductTitle(product.id).then((response) => {
+  apiService.getProduct(product.id).then((response) => {
     product.title = response.product.item.product_description.title;
     // pricingService.sendPricingJson(productTitle, res);
     pricingService.getPricingData(product.title).then((pricingData) => {
@@ -33,22 +34,51 @@ router.get('/:productId', function(req, res) {
       res.sendStatus(500);
     });
   }).catch((response) => {
-    res.sendStatus(500);
+    res.sendStatus(response.statusCode);
   });
 });
 
-router.put('/:productId', function(req, res) {
+router.put('/:productId', (req, res) => {
   const product = req.body;
   // todo: validate data
 
   pricingService.updatePrice(product).then((databaseResponse) => {
-    res.send(200);
+    res.sendStatus(200);
   }).catch((databaseResponse) => {
     res.sendStatus(databaseResponse);
   });
 });
 
-router.get('/*', function(req, res) {
+// todo: get biz logic out of API layer
+router.post('/:productId', (req, res) => {
+  let product = {
+    title: '',
+    current_price: {},
+    id: req.params.productId
+  };
+
+  // todo: validate data
+  apiService.getProduct(product.id).then((response) => {
+    // todo: refactor into mapping function
+    // todo: get actual pricing data
+    product.title = response.product.item.product_description.title;
+    // random prices lol
+    product.current_price.value = Math.random() * 100;
+    product.current_price.currency_code = 'USD';  
+
+    pricingService.upsertProduct(product).then((databaseResponse) => {
+      res.sendStatus(200);
+    }).catch((databaseResponse) => {
+      res.sendStatus(databaseResponse);
+    });
+  }).catch((response) => {
+    res.sendStatus(response.statusCode);
+  });
+
+
+});
+
+router.get('/*', (req, res) => {
   // console.log('/products 404 : ', req.params);
   res.sendStatus(404);
 });

@@ -93,4 +93,34 @@ module.exports = class PricingService {
       }
     });
   }
+
+  upsertProduct(product) {
+    return new Promise((resolve, reject) => {
+      try {
+        // todo: this will update all records with matching title. Probably should match more strictly.
+        Pricing.update({
+          'title': product.title
+        }, {
+          $set: {
+            'title': product.title,
+            'current_price': product.current_price
+          }
+        }, {
+          upsert: true
+        },(err, data) => {
+          if (err) {
+            throw new Error('database error in ' + __filename);
+          }
+
+          if (data.n > 0) {
+            resolve(200);
+          } else {
+            reject(404);
+          }
+        });
+      } catch (error) {
+        reject(500);
+      }
+    });
+  }
 };

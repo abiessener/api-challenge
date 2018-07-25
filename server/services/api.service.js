@@ -15,12 +15,12 @@ module.exports = class ApiService {
    * @param {int|string} productId 
    * @param {Array} productParams 
    */
-  getProductTitle(productId, productParams = []) {
+  getProduct(productId, productParams = []) {
     /**
      * if cache exists and is not expired, result = that
      * else result is the API http promise
      */
-    const result = this.getProductTitleFromApi(productId, productParams);
+    const result = this.getProductFromApi(productId, productParams);
 
     return result;
   }
@@ -31,7 +31,7 @@ module.exports = class ApiService {
    * @param {int} productId 
    * @param {Array} productParams 
    */
-  getProductTitleFromApi(productId, productParams = []) {
+  getProductFromApi(productId, productParams = []) {
     const urlParams = this.buildProductParamsString(productParams);
     const finalUrl = this.baseUrl + this.basePath + productId + urlParams;
 
