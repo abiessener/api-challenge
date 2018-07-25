@@ -38,13 +38,9 @@ router.put('/:productId', function(req, res) {
   // todo: validate data
 
   pricingService.updatePrice(product).then((databaseResponse) => {
-    if (databaseResponse) {
-      responseCode = 200;
-    } else {
-      responseCode = 404;
-    }
-
-    res.sendStatus(responseCode);
+    res.send(200);
+  }).catch((databaseResponse) => {
+    res.send(databaseResponse);
   });
 });
 

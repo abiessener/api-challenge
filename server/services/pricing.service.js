@@ -61,9 +61,16 @@ module.exports = class PricingService {
     });
   }
 
+  /**
+   * Updates the price of a record matching product.title in the database.
+   * TODO: respond differently if no records changed
+   * 
+   * @param {Object} product 
+   */
   updatePrice(product) {
     return new Promise((resolve, reject) => {
       try {
+        // todo: this will update all records with matching title. Probably should match more strictly.
         Pricing.update({
           'title': product.title
         }, {
@@ -75,7 +82,7 @@ module.exports = class PricingService {
             throw new Error('database error in ' + __filename);
           }
   
-          if (data) {
+          if (data.n > 0) {
             resolve(200);
           } else {
             reject(404);
