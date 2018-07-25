@@ -94,6 +94,11 @@ module.exports = class PricingService {
     });
   }
 
+  /**
+   * Upserts the product into the database.
+   * 
+   * @param {Object} product 
+   */
   upsertProduct(product) {
     return new Promise((resolve, reject) => {
       try {

@@ -49,7 +49,9 @@ router.put('/:productId', (req, res) => {
   });
 });
 
-// todo: get biz logic out of API layer
+/**
+ * Upserts the data from the API into our local database. Returns 200 if found, 404 if not.
+ */
 router.post('/:productId', (req, res) => {
   let product = {
     title: '',
