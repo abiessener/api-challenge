@@ -17,7 +17,7 @@ const pricingService = new PricingService();
 router.get('/:productId', function(req, res) {
   let product = {
     title: '',
-    price: '',
+    current_price: {},
     id: req.params.productId
   };
 
@@ -27,8 +27,8 @@ router.get('/:productId', function(req, res) {
   response.then((response) => {
     product.title = response.product.item.product_description.title;
     // pricingService.sendPricingJson(productTitle, res);
-    pricingService.getPricingData(product.title).then((price) => {
-      product.price = price;
+    pricingService.getPricingData(product.title).then((pricingData) => {
+      product.current_price = pricingData;
       productJson = JSON.stringify(product);
       res.send(productJson);
     });

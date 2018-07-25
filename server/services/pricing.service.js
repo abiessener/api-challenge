@@ -23,8 +23,8 @@ module.exports = class PricingService {
           throw new Error('database error in ' + __filename);
         }
 
-        if (data.price) {
-          res.send(data.price);
+        if (data.current_price) {
+          res.send(data.current_price);
         } else {
           res.sendStatus(404);
         }
@@ -49,8 +49,8 @@ module.exports = class PricingService {
             throw new Error('database error in ' + __filename);
           }
   
-          if (data.price) {
-            resolve(data.price);
+          if (data) {
+            resolve(data.current_price);
           } else {
             reject(404);
           }
