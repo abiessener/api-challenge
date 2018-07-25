@@ -26,5 +26,9 @@ No BODY.
 Response 200: OK (product found, database updated)
 Response 404: Product id not found in external API.
 
+### scrape.sh
+`bash scrape.sh {startingId} {endingId}`
+Scrapes info about productIds from the external API into the local database, in sequential order from startingId to endingId. Uses POST route.
+
 ## Copyright
 All code (c) Adam Biessener
