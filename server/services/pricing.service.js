@@ -6,9 +6,10 @@ const Pricing = require('../models/pricing.schema');
  * Service for interacting with price database.
  */
 module.exports = class PricingService {
-  
+
   /**
    * Sends the pricing data for the passed product title, or a 500 on db error, or a 404 if no data found.
+   * 
    * 
    * @param {string} productTitle 
    * @param {ServerResponse} res 
@@ -32,4 +33,31 @@ module.exports = class PricingService {
       res.sendStatus(500);
     }
   }
-}
+
+  /**
+   * Returns a promise that resolves with the data, or rejects with an appropriate HTTP response code.
+   * 
+   * @param {string} productTitle 
+   */
+  getPricingData(productTitle) {
+    return new Promise((resolve, reject) => {
+      try {
+        Pricing.findOne({
+          'title': productTitle
+        }, (err, data) => {
+          if (err) {
+            throw new Error('database error in ' + __filename);
+          }
+  
+          if (data.price) {
+            resolve(data.price);
+          } else {
+            reject(404);
+          }
+        });
+      } catch (error) {
+        reject(500);
+      }
+    });
+  }
+};

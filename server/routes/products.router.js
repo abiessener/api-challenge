@@ -15,14 +15,23 @@ const pricingService = new PricingService();
  * returns a JSON response with product information
  */
 router.get('/:productId', function(req, res) {
-  let productTitle = '';
+  let product = {
+    title: '',
+    price: '',
+    id: req.params.productId
+  };
 
   // call api service to look up product name (which will eventually check cache)
-  let response = apiService.getProductTitle(req.params.productId);
+  let response = apiService.getProductTitle(product.id);
 
   response.then((response) => {
-    productTitle = response.product.item.product_description.title;
-    pricingService.sendPricingJson(productTitle, res);
+    product.title = response.product.item.product_description.title;
+    // pricingService.sendPricingJson(productTitle, res);
+    pricingService.getPricingData(product.title).then((price) => {
+      product.price = price;
+      productJson = JSON.stringify(product);
+      res.send(productJson);
+    });
   });
 });
 
