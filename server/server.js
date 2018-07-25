@@ -7,6 +7,7 @@ var db = require('./modules/db.config.js');
 
 // Route includes
 var indexRouter = require('./routes/index.router');
+var productsRouter = require('./routes/products.router');
 
 var port = process.env.PORT || 5000;
 
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static('./server/public'));
 
 // Routes
+app.use('/products', productsRouter);
 
 // Catch all bucket, must be last!
 app.use('/', indexRouter);
