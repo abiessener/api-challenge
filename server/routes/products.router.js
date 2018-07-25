@@ -29,7 +29,11 @@ router.get('/:productId', function(req, res) {
       product.current_price = pricingData;
       productJson = JSON.stringify(product);
       res.send(productJson);
+    }).catch((response) => {
+      res.sendStatus(500);
     });
+  }).catch((response) => {
+    res.sendStatus(500);
   });
 });
 
@@ -40,7 +44,7 @@ router.put('/:productId', function(req, res) {
   pricingService.updatePrice(product).then((databaseResponse) => {
     res.send(200);
   }).catch((databaseResponse) => {
-    res.send(databaseResponse);
+    res.sendStatus(databaseResponse);
   });
 });
 
