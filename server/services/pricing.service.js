@@ -60,4 +60,30 @@ module.exports = class PricingService {
       }
     });
   }
+
+  updatePrice(product) {
+    return new Promise((resolve, reject) => {
+      try {
+        Pricing.update({
+          'title': product.title
+        }, {
+          $set: {
+            current_price: product.current_price
+          }
+        },(err, data) => {
+          if (err) {
+            throw new Error('database error in ' + __filename);
+          }
+  
+          if (data) {
+            resolve(200);
+          } else {
+            reject(404);
+          }
+        });
+      } catch (error) {
+        reject(500);
+      }
+    });
+  }
 };

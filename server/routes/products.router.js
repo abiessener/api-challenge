@@ -22,9 +22,7 @@ router.get('/:productId', function(req, res) {
   };
 
   // call api service to look up product name (which will eventually check cache)
-  let response = apiService.getProductTitle(product.id);
-
-  response.then((response) => {
+  apiService.getProductTitle(product.id).then((response) => {
     product.title = response.product.item.product_description.title;
     // pricingService.sendPricingJson(productTitle, res);
     pricingService.getPricingData(product.title).then((pricingData) => {
@@ -32,6 +30,21 @@ router.get('/:productId', function(req, res) {
       productJson = JSON.stringify(product);
       res.send(productJson);
     });
+  });
+});
+
+router.put('/:productId', function(req, res) {
+  const product = req.body;
+  // todo: validate data
+
+  pricingService.updatePrice(product).then((databaseResponse) => {
+    if (databaseResponse) {
+      responseCode = 200;
+    } else {
+      responseCode = 404;
+    }
+
+    res.sendStatus(responseCode);
   });
 });
 
