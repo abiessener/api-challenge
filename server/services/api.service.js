@@ -1,5 +1,5 @@
 const http = require('http');
-const request = require('request');
+const request = require('request-promise');
 
 module.exports = class ApiService {
   /**
@@ -20,7 +20,7 @@ module.exports = class ApiService {
      * if cache exists and is not expired, result = that
      * else result is the API http promise
      */
-    result = this.getProductTitleFromApi(productId, productParams);
+    const result = this.getProductTitleFromApi(productId, productParams);
 
     return result;
   }
@@ -33,29 +33,17 @@ module.exports = class ApiService {
    */
   getProductTitleFromApi(productId, productParams = []) {
     const urlParams = this.buildProductParamsString(productParams);
-    const finalUrl = this.baseUrl + this.basePath + productId;
-    let result = '';
+    const finalUrl = this.baseUrl + this.basePath + productId + urlParams;
 
-    request(finalUrl, (error, response, body) => {
-      console.log(error);
-      console.log(response);
-      console.log(body);
-    
-    });
-    // http.get({
-    //   host: this.baseUrl,
-    //   // port: 80,
-    //   path: this.basePath + productId
-    // }, (response) => {
-    //   // console.log(response);
-    //   response.on('data', function(data) {
-    //     result += data;
-    //   });
+    const requestOptions = {
+      uri: finalUrl,
+      headers: {
+        'User-Agent': 'Request-Promise'
+      },
+      json: true
+    };
 
-    //   response.on('end', () => {
-    //     return result;
-    //   });
-    // });
+    return request(requestOptions);
   }
 
   /**

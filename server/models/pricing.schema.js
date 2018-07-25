@@ -7,10 +7,7 @@ var PricingSchema = new Schema({
     price: {type: String, required: true}
   },
   {
-    collection: 'pricing'
+    collection: 'Pricing'
   });
-
-
-
 
 module.exports = mongoose.model('Pricing', PricingSchema);

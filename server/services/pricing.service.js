@@ -1,24 +1,35 @@
 const Pricing = require('../models/pricing.schema');
 
+/**
+ * @class PricingService
+ * 
+ * Service for interacting with price database.
+ */
 module.exports = class PricingService {
-  getPricingJson(productTitle) {
-    result = '';
-
+  
+  /**
+   * Sends the pricing data for the passed product title, or a 500 on db error, or a 404 if no data found.
+   * 
+   * @param {string} productTitle 
+   * @param {ServerResponse} res 
+   */
+  sendPricingJson(productTitle, res) {
     try {
-      Pricing.find({
-        title: productTitle
+      Pricing.findOne({
+        'title': productTitle
       }, (err, data) => {
         if (err) {
-          // TODO: get rid of hard-coded error messaging
           throw new Error('database error in ' + __filename);
         }
 
-        result = data.price;
+        if (data.price) {
+          res.send(data.price);
+        } else {
+          res.sendStatus(404);
+        }
       });
     } catch (error) {
-      result = error;
+      res.sendStatus(500);
     }
-
-    return result;
   }
 }
