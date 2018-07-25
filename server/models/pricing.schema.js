@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 // Mongoose Schema
 var PricingSchema = new Schema({
-    name: {type: String, required: true},
-    
+    title: {type: String, required: true},
+    price: {type: String, required: true}
   },
   {
     collection: 'pricing'
